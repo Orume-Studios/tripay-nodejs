@@ -1,0 +1,25 @@
+{
+  "name": "tripay-nodejs",
+  "version": "1.0.0",
+  "description": "TriPay Payment API Wrapper for Node JS ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Orume-Studios/tripay-nodejs.git"
+  },
+  "keywords": [
+    "tripay",
+    "tripay-wrapper",
+    "tripay-wrapper-nodejs",
+    "tripay-api"
+  ],
+  "authors": ["Yusta"],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Orume-Studios/tripay-nodejs/issues"
+  },
+  "homepage": "https://github.com/Orume-Studios/tripay-nodejs#readme"
+}
