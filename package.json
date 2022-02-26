@@ -16,6 +16,11 @@
     "tripay-wrapper-nodejs",
     "tripay-api"
   ],
+  "author": {
+    "email": "support@orume.id",
+    "name": "Orume Studios",
+    "url": "https://orume.id"
+  },
   "authors": ["Yusta"],
   "license": "ISC",
   "bugs": {
