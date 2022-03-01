@@ -1,8 +1,8 @@
 {
-  "name": "tripay-nodejs",
+  "name": "@orume-studios/tripay-nodejs",
   "version": "1.0.0",
   "description": "TriPay Payment API Wrapper for Node JS",
-  "main": "index.js",
+  "main": "./tests/test.js",
   "scripts": {
     "test": "node ./tests/test.js"
   },
