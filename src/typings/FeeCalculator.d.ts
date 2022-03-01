@@ -30,7 +30,7 @@ export interface IFeeCalculatorGETResponse {
         fee: {
             flat: number;
             percent: string;
-            min: number;
+            min: number.I;
             max: number;
         },
         total_fee: {

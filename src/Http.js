@@ -24,38 +24,56 @@
 const fetch = require('node-fetch');
 
 /**
- * 
- * @param { fetch.RequestInfo } url
- * @param { import('./typings/Method').HTTPMethod } method
- * @param { string } [apiKey]
- * @param { fetch.RequestInit } [init]
- * @returns { Promise<fetch.Response> }
+ * @class FetchUrl
  */
-const fetchUrl = async (url, method, apiKey, init) => {
-    if(method instanceof String) {
-        method = method.toUpperCase();
-    }
+class FetchUrl {
 
-    if(init == undefined) {
-        init = {};
-    }
+    /**
+     * 
+     * @param { string } [apiKey]
+     */
+    constructor(apiKey) {
+        const _apiKey = apiKey;
 
-    if(init.headers == undefined) {
-        init.headers = {};
+        this.getApiKey = () => {
+            return _apiKey;
+        }
     }
+    /**
+     * 
+     * @param { fetch.RequestInfo } url
+     * @param { import('./typings/Method').HTTPMethod } method
+     * @param { fetch.RequestInit } [init]
+     * @returns { Promise<fetch.Response> }
+     */
+    async fetch(url, method, init) {
 
-    url.agent = "TriPay NodeJS - Orume Studios";
-    if(apiKey != undefined) {
-        init.headers["Authorization"] = `Bearer ${apiKey}`;
-    }
 
-    init.method = method;
-    if(init.body != undefined) {
-        init.body = JSON.parse(init.body);
-    }
+        if(method instanceof String) {
+            method = method.toUpperCase();
+        }
     
-    console.log(url);
-    return await fetch.default(url, init);
+        if(init == undefined) {
+            init = {};
+        }
+    
+        if(init.headers == undefined) {
+            init.headers = {};
+        }
+    
+        
+        if(this.getApiKey != undefined) {
+            init.headers["Authorization"] = `Bearer ${this.getApiKey()}`;
+        }
+    
+        init.headers["User-Agent"] = "Orume Studios/TriPay NodeJS v1."
+        init.method = method;
+        if(init.body != undefined) {
+            init.body = JSON.parse(init.body);
+        }
+        
+        return await fetch.default(url, init);
+    }
 }
 
-module.exports = { fetchUrl };
+module.exports = { FetchUrl };

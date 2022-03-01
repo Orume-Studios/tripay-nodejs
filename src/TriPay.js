@@ -21,8 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const { fetchUrl } = require('./Http');
-
+const { FetchUrl } = require('./Http');
 class TriPay {
     /**
      * 
@@ -43,11 +42,13 @@ class TriPay {
         const _apiKey = credentials.apiKey;
         const _privateKey = credentials.privateKey;
         const _merchantCode = credentials.merchantCode;
-
+        const _fetcher = new FetchUrl(_apiKey);
         
         var _callbackUrl = credentials.callbackUrl;
         var _returnUrl = credentials.returnUrl;
         var _productionMode = credentials.productionMode == undefined ? true : credentials.productionMode;
+
+        this.fetch = _fetcher.fetch;
 
         /**
          * @returns { string }
@@ -145,7 +146,7 @@ class TriPay {
         if(code == undefined) code = "";
         else code = "?code=" + code;
 
-        const response = await fetchUrl(this.getApiURL() + "/merchant/payment-channel" + code, "GET" ,this.getApiKey());
+        const response = await this.fetch(this.getApiURL() + "/merchant/payment-channel" + code, "GET");
         return await response.json();
     }
 
@@ -165,7 +166,7 @@ class TriPay {
             }
         }
 
-        const response = await fetchUrl(this.getApiURL() + "/merchant/transactions" + filtersValue, "GET" ,this.getApiKey());
+        const response = await this.fetch(this.getApiURL() + "/merchant/transactions" + filtersValue, "GET");
         return await response.json();
     }
     
@@ -174,14 +175,10 @@ class TriPay {
      * 
      * @param { integer } amount - Transaction amount
      * @param { import('./typings/PaymentChannels').PaymentCode } [code] - Payment channel code. If the parameter is empty, the result will be a list of all available payment channels 
-     * @returns { Promise< import('./typings/FeeCalculator').IFeeCalculatorGETResponse > }
+     * @returns {  Promise< import('./typings/FeeCalculator').IFeeCalculatorGETResponse > }
      */
     async calculateFee(amount, code) {
-        if((amount == undefined || Number.isNaN(amount)) || (code != undefined && (code instanceof String))) {
-            return undefined;
-        }
-
-        const response = await fetchUrl(this.getApiURL() + "/merchant/fee-calculator" + `?amount=${amount}` + (code ? `&code=${amount}` : ""), "GET" ,this.getApiKey());
+        const response = await this.fetch(this.getApiURL() + "/merchant/fee-calculator" + `?amount=${amount}` + (code ? `&code=${amount}` : ""), "GET");
 
         return await response.json();
     }
