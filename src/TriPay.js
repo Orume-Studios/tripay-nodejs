@@ -141,17 +141,17 @@ class TriPay {
      * @param { string } [code] 
      */
     calculate(amount, code) {
-        if(amount == undefined || !(amount instanceof Number) || amount instanceof NaN) {
+        if((amount == undefined || !(amount instanceof Number) || amount instanceof NaN) || (code != undefined && (code instanceof String))) {
             return undefined;
         }
 
-        const parsedBody = JSON.stringify({
-            "amount": amount,
-            "code": code
-        })
+
 
         fetchUrl(this.getApiURL(), "GET" ,this.getApiKey(), {
-            body: parsedBody
+            body: {
+                "amount": amount,
+                "code": code
+            }
         })
     }
 }
