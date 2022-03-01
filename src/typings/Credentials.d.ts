@@ -25,8 +25,14 @@ export default interface Credentials {
     apiKey: string;
     privateKey: string;
     merchantCode: string;
-    merchantRef?: string;
+    productionMode: boolean;
     callbackUrl?: string;
     returnUrl? : string;
-    productionMode: boolean;
+    callbackServer?: {
+        port: number;
+        ssl?: {
+            key: string;
+            certificate: string; 
+        }
+    }
 }

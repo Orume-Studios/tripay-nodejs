@@ -43,7 +43,6 @@ class TriPay {
         const _apiKey = credentials.apiKey;
         const _privateKey = credentials.privateKey;
         const _merchantCode = credentials.merchantCode;
-        const _merchantRef = credentials.merchantRef;
 
         
         var _callbackUrl = credentials.callbackUrl;
@@ -72,15 +71,6 @@ class TriPay {
         this.getMerchantCode = () => {
             return _merchantCode;
         }
-
-        /**
-         * 
-         * @returns { string }
-         */
-        this.getMerchantRef = () => {
-            return _merchantRef;
-        }
-
 
         /**
          * 
