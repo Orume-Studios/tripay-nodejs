@@ -21,4 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export type HTTPMethod = "GET" | "POST"
+export interface IFeeCalculatorGETResponse {
+    success: boolea;
+    message: string;
+    data: {
+        code: string;
+        name: string;
+        fee: {
+            flat: number;
+            percent: string;
+            min: number;
+            max: number;
+        },
+        total_fee: {
+            merchant: number;
+            customer: number;
+        }
+    }[];
+}

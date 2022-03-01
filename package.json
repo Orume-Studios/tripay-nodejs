@@ -21,10 +21,15 @@
     "name": "Orume Studios",
     "url": "https://orume.id"
   },
-  "authors": ["Yusta"],
+  "authors": [
+    "Yusta"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Orume-Studios/tripay-nodejs/issues"
   },
-  "homepage": "https://github.com/Orume-Studios/tripay-nodejs#readme"
+  "homepage": "https://github.com/Orume-Studios/tripay-nodejs#readme",
+  "dependencies": {
+    "node-fetch": "2"
+  }
 }

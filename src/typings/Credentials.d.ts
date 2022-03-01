@@ -21,4 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export type HTTPMethod = "GET" | "POST"
+export default interface Credentials {
+    apiKey: string;
+    privateKey: string;
+    merchantCode: string;
+    merchantRef?: string;
+    callbackUrl?: string;
+    returnUrl? : string;
+    productionMode: boolean;
+}
