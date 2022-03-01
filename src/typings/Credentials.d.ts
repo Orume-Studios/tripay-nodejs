@@ -28,11 +28,5 @@ export default interface Credentials {
     productionMode: boolean;
     callbackUrl?: string;
     returnUrl? : string;
-    callbackServer?: {
-        port: number;
-        ssl?: {
-            key: string;
-            certificate: string; 
-        }
-    }
+    debug?: boolean;
 }

@@ -21,21 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+
 const { FetchUrl } = require('./Http');
+const { closedPayment, openPayment } = require('./payments');
+
 class TriPay {
     /**
      * 
      * @param { import('./typings/Credentials').default } credentials
      */
     constructor(credentials) {
-        
-        if(credentials.apiKey == undefined || credentials.apiKey.length < 1) {
+
+        if(!credentials.apiKey || credentials.apiKey.length < 1) {
             throw new Error("api key should not be undefined!");
         }
-        if(credentials.privateKey == undefined || credentials.privateKey.length < 1) {
+        if(!credentials.privateKey || credentials.privateKey.length < 1) {
             throw new Error("private key should not be undefined!");
         }
-        if(credentials.merchantCode == undefined || credentials.merchantCode.length < 1) {
+        if(!credentials.merchantCode || credentials.merchantCode.length < 1) {
             throw new Error("merchant code should not be undefined!");
         }
 
@@ -43,96 +46,54 @@ class TriPay {
         const _privateKey = credentials.privateKey;
         const _merchantCode = credentials.merchantCode;
         const _fetcher = new FetchUrl(_apiKey);
-        
+        const _debug = credentials.debug == undefined ? true : credentials.debug;
+
         var _callbackUrl = credentials.callbackUrl;
         var _returnUrl = credentials.returnUrl;
         var _productionMode = credentials.productionMode == undefined ? true : credentials.productionMode;
 
-        this.fetch = _fetcher.fetch;
-
-        /**
-         * @returns { string }
-         */
-        this.getApiKey = () => {
-            return _apiKey;
+        this._fetch = _fetcher.fetch;
+        this.isDebug = () => _debug;
+        this.getApiKey = () => _apiKey
+        this.getPrivateKey = () => _privateKey
+        this.getMerchantCode = () => _merchantCode
+        this.getCallbackUrl = () => _callbackUrl
+        this.getReturnUrl = () => _returnUrl;
+        this.isProductionMode = () => _productionMode;
+        this.getApiURL = () => this.isProductionMode() ? "https://tripay.co.id/api" : "https://tripay.co.id/api-sandbox";
+        this.getClosedPayment = () => {
+            const createTransaction = (apiKey) => closedPayment.createTransaction(apiKey);
+            const getTransaction = (apiKey) => closedPayment.getTransaction(apiKey);
+            const generateSignature = (apiKey) => closedPayment.generateSignature(apiKey)
         }
-
-        /**
-         * 
-         * @returns { string }
-         */
-        this.getPrivateKey = () => {
-            return _privateKey;
-        }
-        
-        /**
-         * 
-         * @returns { string }
-         */
-        this.getMerchantCode = () => {
-            return _merchantCode;
-        }
-
-        /**
-         * 
-         * @returns { string }
-         */
-        this.getCallbackUrl = () => {
-            return _callbackUrl;
-        }
-
 
         /**
          * 
          * @param { string } value 
          * @returns { void }
          */
-        this.setCallbackUrl = (value) => {
-            _callbackUrl = value;
-        }
-
+        this.setCallbackUrl = (value) => _callbackUrl = value;
+        
         /**
          * 
-         * @returns { string }
+         * @param { boolean } value
+         * @returns { void }
          */
-        this.getReturnUrl = () => {
-            return _returnUrl;
-        }
+        this.setProductionMode = (value) => _productionMode = value;
 
         /**
          * 
          * @param { string } url 
          * @returns { void }
          */
-        this.setReturnUrl = (url) => {
-            _returnUrl = url;
-        }
+        this.setReturnUrl = (url) => _returnUrl = url;
 
         /**
          * 
-         * @returns { boolean }
-         */
-        this.isProductionMode = () => {
-            return _productionMode;
-        }
-
-        /**
-         * 
-         * @param { boolean } value
+         * @param { string } value 
          * @returns { void }
          */
-        this.setProductionMode = (value) => {
-            _productionMode = value;
-        }
-
-
-        /**
-         * 
-         * @returns { string }
-         */
-        this.getApiURL = () => {
-            return this.isProductionMode() ? "https://tripay.co.id/api" : "https://tripay.co.id/api-sandbox";
-        }
+        this.setCallbackUrl = (value) => _callbackUrl = value;
     }
     
 
@@ -146,7 +107,7 @@ class TriPay {
         if(code == undefined) code = "";
         else code = "?code=" + code;
 
-        const response = await this.fetch(this.getApiURL() + "/merchant/payment-channel" + code, "GET");
+        const response = await this._fetch(this.getApiURL() + "/merchant/payment-channel" + code, "GET");
         return await response.json();
     }
 
@@ -157,7 +118,8 @@ class TriPay {
      */
     async getTransactions(filters) {
         var filtersValue = "";
-        if(filters != undefined) {
+        
+        if(filters) {
             for(const filter in filters) {
                 if(filter != undefined) {
                 
@@ -166,7 +128,7 @@ class TriPay {
             }
         }
 
-        const response = await this.fetch(this.getApiURL() + "/merchant/transactions" + filtersValue, "GET");
+        const response = await this._fetch(this.getApiURL() + "/merchant/transactions" + filtersValue, "GET");
         return await response.json();
     }
     
@@ -178,7 +140,7 @@ class TriPay {
      * @returns {  Promise< import('./typings/FeeCalculator').IFeeCalculatorGETResponse > }
      */
     async calculateFee(amount, code) {
-        const response = await this.fetch(this.getApiURL() + "/merchant/fee-calculator" + `?amount=${amount}` + (code ? `&code=${amount}` : ""), "GET");
+        const response = await this._fetch(this.getApiURL() + "/merchant/fee-calculator" + `?amount=${amount}` + (code ? `&code=${amount}` : ""), "GET");
 
         return await response.json();
     }
