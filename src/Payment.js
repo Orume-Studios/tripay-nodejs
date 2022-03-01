@@ -21,38 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export interface IPaymentChannelsGETResponse {
-    success: boolean;
-    message: string;
-    data: [
-        {
-            group: string;
-            code: string;
-            name: string;
-            type: string;
-            fee_merchant: {
-                flat: number;
-                percent: number;
-            };
-            fee_customer: {
-                flat: number;
-                percent: number;
-            };
-            total_fee: {
-                flat: number;
-                percent: number;
-            };
-            icon_url: string;
-            active: string;
-        }
-    ]
-}
+const { ClosedPayment } = require('./payments/Closed');
+const { OpenPayment } = require('./payments/Open');
 
-export type PaymentCode = "MYBVA" | 
-"PERMATAVA" | "BNIVA" | "BRIVA" | "MANDIRIVA" |
- "BCAVA" | "SMSVA" | "MUAMALATVA" | "CIMBVA" | 
- "SAMPOERNAVA" | "BSIVA" | "DANAMONVA" | 
- "ALFAMART" | "INDOMARET" | "ALFAMIDI" |
- "OVO" | "QRIS" | "QRISC" | "QRISD" 
-
-export type OpenPaymentCode = "BNIVAOP" | "HANAVAOP" | "DANAMONOP" | "CIMBVAOP" | "BRIVAOP" | "QRISOP" | "QRISCOP" |  "BSIVAOP"
+module.exports = { ClosedPayment, OpenPayment };

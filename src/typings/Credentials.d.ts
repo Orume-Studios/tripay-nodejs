@@ -30,3 +30,10 @@ export default interface Credentials {
     returnUrl? : string;
     debug?: boolean;
 }
+
+export interface CredentialsInClass {
+    isDebug: () => boolean;
+    getApiKey: () => string;
+    getPrivateKey: () => string;
+    getMerchantCode: () => string;
+}

@@ -23,7 +23,8 @@
 
 
 const { FetchUrl } = require('./Http');
-const { closedPayment, openPayment } = require('./payments');
+const { Merchant } = require('./Merchant');
+const { ClosedPayment, OpenPayment } = require('./Payment');
 
 class TriPay {
     /**
@@ -52,20 +53,23 @@ class TriPay {
         var _returnUrl = credentials.returnUrl;
         var _productionMode = credentials.productionMode == undefined ? true : credentials.productionMode;
 
-        this._fetch = _fetcher.fetch;
-        this.isDebug = () => _debug;
-        this.getApiKey = () => _apiKey
-        this.getPrivateKey = () => _privateKey
-        this.getMerchantCode = () => _merchantCode
+        this._getFetcher = () => _fetcher;
+        this.getCredentials = () => {
+            const isDebug = () => _debug;
+            const getApiKey = () => _apiKey;
+            const getPrivateKey = () => _privateKey;
+            const getMerchantCode = () => _merchantCode;
+
+            return { isDebug, getApiKey, getPrivateKey, getMerchantCode }
+        }
+
         this.getCallbackUrl = () => _callbackUrl
         this.getReturnUrl = () => _returnUrl;
         this.isProductionMode = () => _productionMode;
         this.getApiURL = () => this.isProductionMode() ? "https://tripay.co.id/api" : "https://tripay.co.id/api-sandbox";
-        this.getClosedPayment = () => {
-            const createTransaction = (apiKey) => closedPayment.createTransaction(apiKey);
-            const getTransaction = (apiKey) => closedPayment.getTransaction(apiKey);
-            const generateSignature = (apiKey) => closedPayment.generateSignature(apiKey)
-        }
+        this.getClosedPaymentAPI  = () => new ClosedPayment(this);
+        this.getOpenPaymentAPI = () => new OpenPayment(this);
+        this.getMerchantAPI = () => new Merchant(this);
 
         /**
          * 
@@ -94,56 +98,8 @@ class TriPay {
          * @returns { void }
          */
         this.setCallbackUrl = (value) => _callbackUrl = value;
-    }
-    
-
-    /**
-     * 
-     * @param { ( import('./typings/PaymentChannels').PaymentCode ) } [code] - Payment channel code. If the parameter is empty, the result will be a list of all available payment channels 
-     * 
-     * @returns { Promise < import('./typings/PaymentChannels').IPaymentChannelsGETResponse > }
-     */
-    async getPaymentChannels(code) {
-        if(code == undefined) code = "";
-        else code = "?code=" + code;
-
-        const response = await this._fetch(this.getApiURL() + "/merchant/payment-channel" + code, "GET");
-        return await response.json();
-    }
-
-    /**
-     * @param { import('./typings/Transactions').ITransactionsGETFilters } filters - Filter result data that matches with the given filter. If the filters are empty, the result will be a list of all transactions data
-     *
-     * @returns { Promise < import('./typings/Transactions').ITransactionsGETResponse > }
-     */
-    async getTransactions(filters) {
-        var filtersValue = "";
         
-        if(filters) {
-            for(const filter in filters) {
-                if(filter != undefined) {
-                
-                    filtersValue.length != 0 ? filtersValue += `&${filter}=${filters[filter]}` : filtersValue = `?${filter}=${filters[filter]}`
-                }
-            }
-        }
-
-        const response = await this._fetch(this.getApiURL() + "/merchant/transactions" + filtersValue, "GET");
-        return await response.json();
-    }
-    
-
-    /**
-     * 
-     * @param { integer } amount - Transaction amount
-     * @param { import('./typings/PaymentChannels').PaymentCode } [code] - Payment channel code. If the parameter is empty, the result will be a list of all available payment channels 
-     * @returns {  Promise< import('./typings/FeeCalculator').IFeeCalculatorGETResponse > }
-     */
-    async calculateFee(amount, code) {
-        const response = await this._fetch(this.getApiURL() + "/merchant/fee-calculator" + `?amount=${amount}` + (code ? `&code=${amount}` : ""), "GET");
-
-        return await response.json();
     }
 }
 
-module.exports = TriPay;
+module.exports = { TriPay };

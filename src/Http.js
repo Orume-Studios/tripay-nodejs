@@ -48,7 +48,6 @@ class FetchUrl {
      */
     async fetch(url, method, init) {
 
-
         if(method instanceof String) {
             method = method.toUpperCase();
         }
@@ -62,16 +61,20 @@ class FetchUrl {
         }
     
         
-        if(this.getApiKey != undefined) {
+        if(this.getApiKey() != undefined) {
             init.headers["Authorization"] = `Bearer ${this.getApiKey()}`;
         }
     
         init.headers["User-Agent"] = "Orume Studios/TriPay NodeJS v1."
         init.method = method;
+
+
         if(init.body != undefined) {
-            init.body = JSON.parse(init.body);
+            init.headers["Content-Type"] = "application/json"
+            init.body = JSON.stringify(init.body);
         }
         
+
         return await fetch.default(url, init);
     }
 }
