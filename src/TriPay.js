@@ -27,6 +27,7 @@ class TriPay {
         const _privateKey = privateKey;
         const _merchantCode = merchantCode;
         const _merchantRef = merchantRef;
+
         
         var _callbackUrl = callbackUrl;
         var _returnUrl = returnUrl;
