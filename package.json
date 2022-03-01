@@ -1,7 +1,7 @@
 {
   "name": "tripay-nodejs",
   "version": "1.0.0",
-  "description": "TriPay Payment API Wrapper for Node JS ",
+  "description": "TriPay Payment API Wrapper for Node JS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,7 +22,7 @@
     "url": "https://orume.id"
   },
   "authors": ["Yusta"],
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Orume-Studios/tripay-nodejs/issues"
   },
