@@ -1,5 +1,5 @@
 {
-  "name": "@orume-studios/tripay-nodejs",
+  "name": "tripay-nodejs",
   "version": "1.0.1",
   "description": "TriPay Payment API Wrapper for Node JS",
   "main": "./index.js",
